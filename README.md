@@ -24,7 +24,7 @@
 | Android ARM64 原生库与调用接口 | 已核实云端构建成功并产出 AArch64 ELF 动态库（Android API 34 / NDK r27c）；**尚未验证安卓设备运行** |
 | 渴瘾独立画面识别 / S13-KYZ 事件解析 | 尚未实施 |
 | 手机版推荐坐标映射、结果过期保护 | 尚未实施 |
-| Android 16 原生运行探针 | 云端 Debug 测试 APK 已编译并通过签名、ABI、包名核查；发现 4 KiB ELF 对齐风险，16 KiB 兼容版本待重新编译；手机运行尚未验证 |
+| Android 16 原生运行探针 | 16 KiB 对齐版 Debug APK 已在云端编译，ELF 4/4 LOAD 段、APK 内原生库一致性、zipalign 与 Debug 签名检查通过；**实机安装及求解尚未验证** |
 | Android 16 实机准确率、性能与耗电验证 | 尚未实施；探针仅使用合成单卡牌局面 |
 | 可交付 APK / 正式版本发布 | 尚未实施 |
 
@@ -48,8 +48,8 @@
 
 - 独立 Debug 测试 APK 云端构建成功，包名 `com.huojuaidev.vorax.probe`，仅 ARM64，`dotnet build` 为 **0 errors / 2 warnings**；构建结果并非 Android 手机实测。
 - 已验证 APK 使用 Debug 签名，包含 AArch64 Vorax 原生库，与火炬AI助手正式 APP 的安装包名分离。
-- 检出 `XA0141`：旧原生库按 **4 KiB ELF 页大小**对齐。私有开发分支已加入 16 KiB 对齐的构建与校验，但**新版本仍待云端编译验证**。
-- `XA4301` 表示重复引用原生库的非阻断警告，后续跟踪处理。
+- 16 KiB 兼容版已重新云端编译：4/4 个 ELF `PT_LOAD` 段均为 `p_align=0x4000`；`XA0141` 不再出现。`zipalign -c -P 16 -v 4`、APK `.so` SHA-256 一致性和 Debug 签名校验均通过；`.so` 在 APK 中为压缩条目且通过安装时解压加载。
+- 重新构建为 **0 errors / 1 warning**，仅余 `XA4301`（重复引用的非阻断警告，最终仅有一份字节校验一致的原生库），后续跟踪处理。
 - 设备上的 P/Invoke、原生加载、取消时延、性能与耗电均**尚未验证**。不公布私有 APK、源码或内部日志。
 
 ## 仓库公开边界
