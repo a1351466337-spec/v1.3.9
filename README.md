@@ -128,6 +128,14 @@
 - 新诊断字段位于每个槽位的 `mobileBoard.slots[i].numericProbe`，不是 JSON 顶层。`attempted=true` 仅表示触发读数，`exactProductMatches` 才统计数学符合的候选，所有候选仍 `trusted=false`。
 - 目前不保证任何真实中文游戏截图的单槽数字识别准确率，仍不向游戏发送或展示操作建议。
 
+### v0.0.6 APK 原件离线核验（2026-11-14）
+
+- 已直接核验云端交付的 Debug APK：大小 23,714,226 字节，SHA-256 `af3e69e456ea3621115bef1e6575c0d5dc86544a63861053313990913e6cbefe`，与构建报告一致；ZIP CRC 检查通过。
+- 解析 AndroidManifest：包名 `com.huojuaidev.vorax.probe`、versionCode 6、versionName 0.0.6、minSdk 34 / targetSdk 36。
+- APK 中有 195 个 AArch64 ELF 原生库、586 个 LOAD 段，均符合至少 16 KiB 对齐；Vorax 库内 SHA-256、大小与云端报告一致，8 个 C ABI 导出存在。
+- JAR 签名校验通过，Debug 签名证书 SHA-256 与报告一致；APK v2/v3 签名块存在，但此离线环境未运行 `apksigner` 进行独立 v3 验证，云端记录显示其通过。
+- **尚未验证 Android 手机对真实截图的 v0.0.6 单槽数字识别准确率**；不开放任何自动推荐功能。
+
 ## 仓库公开边界
 
 本仓库只允许存放经许可核对的**公开上游源码及资源**、原始许可证，以及独立撰写的公开进度文档。禁止上传任何非公开 Android APP 源码、私有模型及素材、调试截图/日志、个人数据、秘钥、签名证书、构建密钥及私有 Git 历史。
